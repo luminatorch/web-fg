@@ -1,13 +1,63 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+/* Theme Colors */
+:root {
+  --primary-color: rgba(58, 221, 120, 0.92);
+  --background-color: #000000;
+  --surface-color: #808080;
+  --error-color: #ff0000;
+  --text-on-primary: #ffffff;
+  --text-on-secondary: #ffffff;
+  --text-on-background: #ffffff;
+  --text-on-surface: #ffffff;
+  --secondary-color: rgba(58, 221, 120, 0.92); /* Assuming secondary color is the same as primary */
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+/* General Body Styling for Dark Theme */
+body {
+  background-color: var(--background-color);
+  color: var(--text-on-background);
+  font-size: 16px; /* Default to medium body text */
 }
+
+/* Headers and Displays */
+h1, .display-large {
+  font-weight: bold;
+  font-size: 2em; /* Example size, adjust as needed */
+}
+
+h2, .title-medium {
+  color: var(--surface-color);
+  font-size: 1.5em; /* Example size, adjust as needed */
+}
+
+/* Buttons */
+button {
+  background-color: var(--primary-color);
+  color: var(--text-on-primary);
+  border: none;
+  padding: 10px 20px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  font-weight: bold;
+  font-size: 18px; /* Matching the Dart bodyLarge style */
+}
+
+/* Error Text */
+.error-text {
+  color: var(--error-color);
+}
+
+/* Additional Classes for Text Styles */
+.body-large {
+  font-size: 18px; /* bodyLarge */
+}
+
+.body-medium {
+  font-size: 16px; /* bodyMedium */
+}
+
+.label-large {
+  letter-spacing: 1.5px;
+  font-weight: bold;
+}
+
+/* Customize further based on your needs */
