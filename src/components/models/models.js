@@ -1,5 +1,5 @@
 export class Score {
-    constructor(documentId, patientName, createdAt, { fibrillation, age, strokeScale, tHemorrhage, glucose, aspects, injury, nasoenteral }, totalScore) {
+    constructor(documentId, patientName, { fibrillation, age, strokeScale, tHemorrhage, glucose, aspects, injury, nasoenteral }, createdAt, totalScore) {
         this.documentId = documentId;
         this.patientName = patientName;
         this.score = {
@@ -18,7 +18,9 @@ export class Score {
     }
 
     updateOption(option, value) {
-        if (Object.keys(this).includes(option)) {
+        if (this.score.hasOwnProperty(option)) {
+            this.score[option] = value;
+        } else {
             this[option] = value;
         }
     }

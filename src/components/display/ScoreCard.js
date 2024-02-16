@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Card, CardContent, Typography, Grid, IconButton, Menu, MenuItem } from '@mui/material';
-//import MoreVertIcon from '@mui/icons-material/MoreVert';
 import MoreVertIcon from '@mui/material/Icon';
 
 const ScoreCard = ({ score }) => {

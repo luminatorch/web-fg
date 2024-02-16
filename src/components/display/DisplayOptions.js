@@ -9,89 +9,60 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { newScore } from '../operations/firebaseOperations';
 import { Score } from '../models/models';
 
-// Define options and suboptions directly in the component
-// const options = [
-//   { label: 'Flutter/Atrial fibrillation? (1 pt)', value: 'F', score: 1 },
-//   { label: 'Age >= 75? (1 pt)', value: 'A', score: 1 },
-//   { label: 'Stroke Scale NIHSS >= 12? (2 pts)', value: 'S', score: 2 },
-//   { label: 'Glucose >= 140? (1 pt)', value: 'G', score: 1 },
-//   { label: 'ASPECTS =<7? (2 pts)', value: 'AS', score: 2 },
-//   { label: 'Injury (injúria renal)? (1 pt)', value: 'I', score: 1 },
-//   { label: 'Nasoenteral sonda? (1 pt)', value: 'N', score: 1 },
-// ];
-
-// const subOptions = [
-//   { label: 'None', value: 'none', score: 0 },
-//   { label: 'Petequial (1 pt)', value: 'petequial', score: 1 },
-//   { label: 'Hematoma (2 pts)', value: 'hematoma', score: 2 },
-// ];
 
 function DisplayOptions() {
     const [patientName, setPatientName] = useState('');
-    //const [score, setScore] = useState(new Score());
-    //const [selectedOptions, setSelectedOptions] = useState([]);
-    //const [selectedSubOption, setSelectedSubOption] = useState('none');
-    const [scores, setScores] = useState({
-        fibrillation: false,
-        age: false,
-        strokeScale: false,
-        tHemorrhage: 'none', // Assuming 'none', 'petequial', 'hematoma' as values
-        glucose: false,
-        aspects: false,
-        injury: false,
-        nasoenteral: false
-    });
-    //const [totalScore, setTotalScore] = useState(0);
+    const [score, setScore] = useState(new Score(undefined, undefined,
+            {   fibrillation: false, 
+                age: false, 
+                strokeScale: false, 
+                tHemorrhage: 'none', 
+                glucose: false, 
+                aspects: false, 
+                injury: false, 
+                nasoenteral: false  }, undefined, undefined));
     const [openDialog, setOpenDialog] = useState(false);
 
-
-
-    const optionLabels = {
-        fibrillation: 'Flutter/Atrial Fibrillation? (1 pt)',
-        age: 'Age >= 75? (1 pt)',
-        strokeScale: 'Stroke Scale NIHSS >= 12? (2 pts)',
-        tHemorrhage: 'Transformation Hemorrhage',
-        glucose: 'Glucose >= 140? (1 pt)',
-        aspects: 'ASPECTS =<7? (2 pts)',
-        injury: 'Injury (injúria renal)? (1 pt)',
-        nasoenteral: 'Nasoenteral Sonda? (1 pt)',
-    };
-  
-
-    function getOptionLabel(optionKey) {
-        // Returns the label for the given option key, or the key itself if not found
-        return optionLabels[optionKey] || optionKey;
-    }
   
 
 
     const navigate = useNavigate();
 
     const handleOptionChange = (option, value) => {
-        setScores(prevScores => ({
-        ...prevScores,
-        [option]: value
-        }));
-        // const updatedScore = new Score(score);
-        // updatedScore.updateOption(option, value);
-        // setScore(updatedScore);
+        const updatedScore = new Score(
+            score.documentId, 
+            score.patientName,{ 
+                fibrillation: score.score.fibrillation,
+                age: score.score.age,
+                strokeScale: score.score.strokeScale,
+                tHemorrhage: score.score.tHemorrhage,
+                glucose: score.score.glucose,
+                aspects: score.score.aspects,
+                injury: score.score.injury,
+                nasoenteral: score.score.nasoenteral,
+            },
+            score.createdAt,
+            score.totalScore
+            );
+        updatedScore.updateOption(option, value);
+        setScore(updatedScore);
     };
 
-  const handleClickOpen = () => {
-    setOpenDialog(true);
-  };
-  
-  const handleClose = () => {
-    setOpenDialog(false);
-  };
+    const handleClickOpen = () => {
+        setOpenDialog(true);
+    };
+    
+    const handleClose = () => {
+        setOpenDialog(false);
+    };
 
 
     const handleSubmit = async (e) => {
         e.preventDefault();
     
         // Directly calculate total score right before submission
-        const calculatedTotalScore = Object.keys(scores).reduce((acc, key) => {
-            const value = scores[key];
+        const calculatedTotalScore = Object.keys(score.score).reduce((acc, key) => {
+            const value = score.score[key];
             if (typeof value === 'boolean' && value) {
                 if (key === 'strokeScale' || key === 'aspects') {
                     return acc + 2; // strokeScale and aspects are worth 2 points each
@@ -100,11 +71,11 @@ function DisplayOptions() {
                 }
             }
             return acc;
-        }, 0) + (scores.tHemorrhage === 'petequial' ? 1 : scores.tHemorrhage === 'hematoma' ? 2 : 0);
+        }, 0) + (score.score.tHemorrhage === 'petequial' ? 1 : score.score.tHemorrhage === 'hematoma' ? 2 : 0);
     
         try {
 
-            await newScore(patientName, scores, calculatedTotalScore);
+            await newScore(score, calculatedTotalScore);
         
         navigate('/success', { state: { patientName, calculatedTotalScore } });
         } catch (error) {
@@ -136,7 +107,7 @@ function DisplayOptions() {
                 <FormControlLabel
                     control={
                         <Checkbox
-                        checked={scores.fibrillation}
+                        checked={score.score.fibrillation}
                         onChange={(e) => handleOptionChange('fibrillation', e.target.checked)}
                         name="fibrillation"
                         />
@@ -149,7 +120,7 @@ function DisplayOptions() {
             <FormControlLabel
                 control={
                     <Checkbox
-                    checked={scores.age}
+                    checked={score.score.age}
                     onChange={(e) => handleOptionChange('age', e.target.checked)}
                     name="age"
                     />
@@ -162,7 +133,7 @@ function DisplayOptions() {
             <FormControlLabel
                 control={
                     <Checkbox
-                    checked={scores.strokeScale}
+                    checked={score.score.strokeScale}
                     onChange={(e) => handleOptionChange('strokeScale', e.target.checked)}
                     name="strokeScale"
                     />
@@ -174,7 +145,7 @@ function DisplayOptions() {
             <FormLabel component="legend">Transformation Hemorrhage</FormLabel>
             <RadioGroup
                 name="tHemorrhage"
-                value={scores.tHemorrhage}
+                value={score.score.tHemorrhage}
                 onChange={(e) => handleOptionChange('tHemorrhage', e.target.value)}
             >
                 <FormControlLabel value="none" control={<Radio />} label="None" />
@@ -186,7 +157,7 @@ function DisplayOptions() {
             <FormControlLabel
                 control={
                     <Checkbox
-                    checked={scores.glucose}
+                    checked={score.score.glucose}
                     onChange={(e) => handleOptionChange('glucose', e.target.checked)}
                     name="glucose"
                     />
@@ -199,7 +170,7 @@ function DisplayOptions() {
             <FormControlLabel
                 control={
                     <Checkbox
-                    checked={scores.aspects}
+                    checked={score.score.aspects}
                     onChange={(e) => handleOptionChange('aspects', e.target.checked)}
                     name="aspects"
                     />
@@ -212,7 +183,7 @@ function DisplayOptions() {
             <FormControlLabel
                 control={
                     <Checkbox
-                    checked={scores.injury}
+                    checked={score.score.injury}
                     onChange={(e) => handleOptionChange('injury', e.target.checked)}
                     name="injury"
                     />
@@ -225,7 +196,7 @@ function DisplayOptions() {
             <FormControlLabel
                 control={
                     <Checkbox
-                    checked={scores.nasoenteral}
+                    checked={score.score.nasoenteral}
                     onChange={(e) => handleOptionChange('nasoenteral', e.target.checked)}
                     name="nasoenteral"
                     />

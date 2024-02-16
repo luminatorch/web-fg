@@ -2,7 +2,7 @@
 import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
 import { doc, setDoc, addDoc, collection, updateDoc, arrayUnion, query, where, getDocs, getDoc } from 'firebase/firestore';
 import db from '../../firebase-config';
-import { FormControlLabel } from '@mui/material';
+import { Score } from '../models/models';
 
 // Function to create a new user
 export const createNewUser = async (email, password, name) => {
@@ -30,8 +30,9 @@ export const createNewUser = async (email, password, name) => {
   }
 };
 
-// Create a new score
-export const newScore = async (patient_name, scoreData, total_score) => {
+// Create a score with the model
+export const newScore = async (score, total_score) => {
+
     const auth = getAuth();
     const user = auth.currentUser;
 
@@ -42,27 +43,92 @@ export const newScore = async (patient_name, scoreData, total_score) => {
 
     try {
 
-        const userDocID = await getUserDocumentId(user.uid);
-        const scoreRef = await addDoc(collection(db, 'scores'), {
-            patientName: patient_name,
-            totalScore: total_score,
-            score: scoreData,
-            createdAt: new Date(),
-            userId: user.uid
-        });
+      const userDocID = await getUserDocumentId(user.uid);
+      const scoreRef = await addDoc(collection(db, 'scores'), {
+          patientName: score.patientName,
+          totalScore: total_score,
+          score: {
+            fibrillation: score.score.fibrillation,
+            age: score.score.age,
+            strokeScale: score.score.strokeScale,
+            tHemorrhage: score.score.tHemorrhage,
+            glucose: score.score.glucose,
+            aspects: score.score.aspects,
+            injury: score.score.injury,
+            nasoenteral: score.score.nasoenteral
+          },
+          createdAt: new Date(),
+          userId: user.uid
+      });
 
-        const userDocRef = doc(db, 'users', userDocID);
 
-        await updateDoc(userDocRef, {
-            scores: arrayUnion(scoreRef.id)
-        });
 
-        return { success: true, scoreId: scoreRef.id };
+      // const scoreRef = await addDoc(collection(db, 'scores'), {
+      //     patientName: score.patientName,
+      //     totalScore: total_score,
+      //     score: {
+      //       fibrillation: score.fibrillation,
+      //       age: score.age,
+      //       strokeScale: score.strokeScale,
+      //       tHemorrhage: score.tHemorrhage,
+      //       glucose: score.glucose,
+      //       aspects: score.aspects,
+      //       injury: score.injury,
+      //       nasoenteral: score.nasoenteral
+      //     },
+      //     createdAt: new Date(),
+      //     userId: user.uid
+      // });
+
+
+      const userDocRef = doc(db, 'users', userDocID);
+
+      await updateDoc(userDocRef, {
+        scores: arrayUnion(scoreRef.id)
+      });
+
+      return { success: true, scoreId: scoreRef.id };
+      
     } catch (error) {
-        console.error("Error adding new score: ", error);
-        return { success: false, error: error.message };
+      console.error("Error adding new score: ", error);
+      return { success: false, error: error.message };      
     }
+
 }
+
+// Create a new score
+// export const newScore = async (patient_name, scoreData, total_score) => {
+//     const auth = getAuth();
+//     const user = auth.currentUser;
+
+//     if (!user) {
+//         console.error("No authenticated user found. ");
+//         return { success: false, error: "No authenticated user. "};
+//     }
+
+//     try {
+
+//         const userDocID = await getUserDocumentId(user.uid);
+//         const scoreRef = await addDoc(collection(db, 'scores'), {
+//             patientName: patient_name,
+//             totalScore: total_score,
+//             score: scoreData,
+//             createdAt: new Date(),
+//             userId: user.uid
+//         });
+
+//         const userDocRef = doc(db, 'users', userDocID);
+
+//         await updateDoc(userDocRef, {
+//             scores: arrayUnion(scoreRef.id)
+//         });
+
+//         return { success: true, scoreId: scoreRef.id };
+//     } catch (error) {
+//         console.error("Error adding new score: ", error);
+//         return { success: false, error: error.message };
+//     }
+// }
 
 // Get the document ID of a user
 export const getUserDocumentId = async (uid) => {
@@ -81,46 +147,9 @@ export const getUserDocumentId = async (uid) => {
 };
 
 
-// List all scores of a user
-// export const listScores = async () => {
-//   const auth = getAuth();
-//   const user = auth.currentUser;
-
-//   if (!user) {
-//       console.error("No authenticated user found. ");
-//       return { success: false, error: "No authenticated user. "};
-//   }
-
-//   try {
-//     const userDocID = await getUserDocumentId(user.uid);
-
-//     const userDocRef = doc(db, 'users', userDocID);
-//     const userDocSnapshot = await getDoc(userDocRef);
-
-//     if (userDocSnapshot.exists()) {
-//       const dataArray = userDocSnapshot.data().scores;
-//       dataArray.forEach(element => {
-//         <FormControlLabel>
-//           element
-//         </FormControlLabel>
-//       });
-      
-//     } else {
-//       console.log("The document does not exist")
-//     }
-
-    
-    
-//   } catch (error) {
-    
-//   }
-
-// }
-
 
 export const listScores = async (uid) => {
-  //const auth = getAuth();
-  //const user = auth.currentUser;
+
   const userId = await getUserDocumentId(uid);
   const userDocRef = doc(db, 'users', userId);
   const userDocSnap = await getDoc(userDocRef);
