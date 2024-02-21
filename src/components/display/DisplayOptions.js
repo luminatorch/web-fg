@@ -77,7 +77,7 @@ function DisplayOptions() {
 
             await newScore(score, calculatedTotalScore);
         
-        navigate('/success', { state: { patientName, calculatedTotalScore } });
+            navigate('/success', { state: { patientName: score.patientName , totalScore: calculatedTotalScore } });
         } catch (error) {
         console.error("Could not add the document: ", error);
         }
@@ -96,8 +96,8 @@ function DisplayOptions() {
       }} >
             <TextField
                 label="Patient's Name"
-                value={patientName}
-                onChange={(e) => setPatientName(e.target.value)}
+                value={score.patientName}
+                onChange={(e) => handleOptionChange('patientName',e.target.value)}
                 variant="outlined"
                 margin="normal"
                 fullWidth

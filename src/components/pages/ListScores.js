@@ -1,55 +1,51 @@
-import { listScores } from '../operations/firebaseOperations';
+import { fetchScores } from '../operations/firebaseOperations';
 import React, { useEffect, useState } from 'react';
-import { Grid, Card, CardContent, Typography } from '@mui/material';
-import { getAuth } from 'firebase/auth';
+import { Grid } from '@mui/material';
 import ScoreCard from '../display/ScoreCard';
+import { useNavigate, useLocation } from 'react-router-dom';
 
-  
 
 const ListScores = () => {
-    const [scores, setScores] = useState([]);
-    const auth = getAuth();
-    const user = auth.currentUser;
-  
-    useEffect(() => {
-      if (user) {
-        listScores(user.uid).then(setScores);
-      }
-    }, [user]);
-  
-    return (
+  const [scores, setScores] = useState([]);
+  const location = useLocation();
+  const { userId } = location.state || {};
+  const navigate = useNavigate();
 
-      <Grid container spacing={2} direction='column'>
-        {scores.map((score) => (
-          <Grid item key={score.id} xs={12} sm={6} md={4}>
-            {/* <Card>
-              <CardContent>
-                <Typography variant="h6" component="h2">
-                  Paciente: {score.patientName}
-                </Typography>
-                Score: {score.totalScore} 
-              </CardContent>
-            </Card> */}
-         <Grid item key={score.id} xs={12}>
-           <ScoreCard score={score} />
-         </Grid>
-          </Grid>
-        ))}
-      </Grid>
+  useEffect(() => {
+    const loadScores = async () => {
+      const fetchedScores = await fetchScores(userId);
+      setScores(fetchedScores);
+    };
+    loadScores();
+  }, []);
 
-    );
+  const handleViewOptions = (scores) => {
+    // Logic to view options
+    navigate('/score-details', {state: {score: scores}});
   };
 
-// const ListScores = ({ scores }) => (
-//     <Grid container spacing={2} direction="column">
-//       {scores.map(score => (
-//         <Grid item key={score.id} xs={12}>
-//           <ScoreCard score={score} />
-//         </Grid>
-//       ))}
-//     </Grid>
-//   );
-  
+  const handleUpdateScore = (scores) => {
+    // Logic to update score, potentially navigate to DisplayOptions with score data
+  };
 
-  
+  const handleDeleteScore = (scores) => {
+    // Logic to delete score
+  };
+
+  return (
+    <Grid container spacing={2}>
+      {scores.map(scores => (
+        <Grid item key={scores.id} xs={12}>
+          <ScoreCard
+            score={scores}
+            onViewOptions={() => handleViewOptions(scores)}
+            onUpdateScore={() => handleUpdateScore(scores)}
+            onDeleteScore={() => handleDeleteScore(scores)}
+          />
+        </Grid>
+      ))}
+    </Grid>
+  );
+};
+
 export default ListScores;

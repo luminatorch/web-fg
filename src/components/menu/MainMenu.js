@@ -4,27 +4,13 @@ import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { getAuth, signOut } from 'firebase/auth';
-import { newScore } from '../operations/firebaseOperations';
-import { Score } from '../models/models';
+import { deleteAllDocuments, clearUserScores } from '../operations/firebaseOperations';
+
 
 function MainMenu() {
   const navigate = useNavigate();
   const auth = getAuth();
 
-  const testData = new Score(
-    'IDteste','tudao', {
-      fibrillation: true,
-      age: true,
-      strokeScale: true,
-      tHemorrhage: 'hematoma',
-      glucose: true,
-      aspects: true,
-      injury: true,
-      nasoenteral: true
-    },
-    new Date(),
-    0
-  )
 
   const handleAddScore = () => {
     // Navigate to the Add Score page/component
@@ -33,7 +19,7 @@ function MainMenu() {
 
   const handleListScores = () => {
     // Navigate to the List Scores page/component
-    navigate('/list-scores');
+    navigate('/list-scores', { state: { userId: auth.currentUser.uid }});
   };
 
   const handleSignOut = () => {
@@ -41,15 +27,30 @@ function MainMenu() {
     navigate('/');
   }
 
-  const handleTestScore = async () => {
+  const handleDelete = async () => {
     try {
 
-      await newScore(testData, 4);
+      await deleteAllDocuments('scores');
 
     }  catch (error) {
-      console.error("Could not add the document: ", error);
+      console.error("Could not delete: ", error);
     }
+  }
+
+  const handleUserDelete = async () => {
+
+    try {
+
+      await clearUserScores();
+
+    } catch(error) {
+      console.error("Could not delete: ", error);
     }
+
+  }
+
+
+
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: 4 }}>
@@ -66,8 +67,11 @@ function MainMenu() {
         <Button variant="contained" color="primary" onClick={handleSignOut}>
           Sign out
         </Button>
-        <Button variant="contained" color="primary" onClick={handleTestScore}>
-          ADD TEST SCORE
+        <Button variant="contained" color="primary" onClick={handleDelete}>
+          DELETE DOCUMENTS FROM SCORES COLLECTION
+        </Button>
+        <Button variant="contained" color="primary" onClick={handleUserDelete}>
+          DELETE THE USERS SCORES
         </Button>
       </Box>
     </Box>

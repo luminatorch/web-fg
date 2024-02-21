@@ -1,8 +1,7 @@
 // firebaseOperations.js
 import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
-import { doc, setDoc, addDoc, collection, updateDoc, arrayUnion, query, where, getDocs, getDoc } from 'firebase/firestore';
+import { doc, setDoc, addDoc, collection, deleteDoc, updateDoc, arrayUnion, query, where, getDocs, getDoc } from 'firebase/firestore';
 import db from '../../firebase-config';
-import { Score } from '../models/models';
 
 // Function to create a new user
 export const createNewUser = async (email, password, name) => {
@@ -96,40 +95,6 @@ export const newScore = async (score, total_score) => {
 
 }
 
-// Create a new score
-// export const newScore = async (patient_name, scoreData, total_score) => {
-//     const auth = getAuth();
-//     const user = auth.currentUser;
-
-//     if (!user) {
-//         console.error("No authenticated user found. ");
-//         return { success: false, error: "No authenticated user. "};
-//     }
-
-//     try {
-
-//         const userDocID = await getUserDocumentId(user.uid);
-//         const scoreRef = await addDoc(collection(db, 'scores'), {
-//             patientName: patient_name,
-//             totalScore: total_score,
-//             score: scoreData,
-//             createdAt: new Date(),
-//             userId: user.uid
-//         });
-
-//         const userDocRef = doc(db, 'users', userDocID);
-
-//         await updateDoc(userDocRef, {
-//             scores: arrayUnion(scoreRef.id)
-//         });
-
-//         return { success: true, scoreId: scoreRef.id };
-//     } catch (error) {
-//         console.error("Error adding new score: ", error);
-//         return { success: false, error: error.message };
-//     }
-// }
-
 // Get the document ID of a user
 export const getUserDocumentId = async (uid) => {
 
@@ -147,22 +112,67 @@ export const getUserDocumentId = async (uid) => {
 };
 
 
+// Fetch scores from user
+// export const fetchScores = async (uid) => {
 
-export const listScores = async (uid) => {
+//   const userId = await getUserDocumentId(uid);
+//   const userDocRef = doc(db, 'users', userId);
+//   const userDocSnap = await getDoc(userDocRef);
 
+//   if (userDocSnap.exists()) {
+//     const userScoresIds = userDocSnap.data().scores; // The array of scores document IDs
+//     const scoresPromises = userScoresIds.map(scoreId => getDoc(doc(db, 'scores', scoreId)));
+//     const scoresDocs = await Promise.all(scoresPromises);
+
+//     const scores = scoresDocs.map(doc => ({ id: doc.id, patientName: doc.data().patientName, totalScore: doc.data().totalScore }));
+//     return scores; // Array of score objects
+//   } else {
+//     console.log("No such user document!");
+//     return [];
+//   }
+// };
+
+export const fetchScores = async (uid) => {
   const userId = await getUserDocumentId(uid);
   const userDocRef = doc(db, 'users', userId);
   const userDocSnap = await getDoc(userDocRef);
 
   if (userDocSnap.exists()) {
     const userScoresIds = userDocSnap.data().scores; // The array of scores document IDs
-    const scoresPromises = userScoresIds.map(scoreId => getDoc(doc(db, 'scores', scoreId)));
-    const scoresDocs = await Promise.all(scoresPromises);
+    const scoresDataPromises = userScoresIds.map(scoreId => getDoc(doc(db, 'scores', scoreId)));
+    const scoresDataSnapshots = await Promise.all(scoresDataPromises);
 
-    const scores = scoresDocs.map(doc => ({ id: doc.id, patientName: doc.data().patientName, totalScore: doc.data().totalScore }));
-    return scores; // Array of score objects
+    const scoresData = scoresDataSnapshots.map(snapshot => ({ id: snapshot.id, ...snapshot.data() }));
+    return scoresData; // Array of score data objects
   } else {
     console.log("No such user document!");
     return [];
+  }
+};
+
+
+// FOR DEVELOPMENT ONLY
+export const deleteAllDocuments = async (collectionName) => {
+  const querySnapshot = await getDocs(collection(db, collectionName));
+  querySnapshot.forEach((document) => {
+    deleteDoc(doc(db, collectionName, document.id));
+  });
+};
+
+// STILL DEVELOPMENT ONLY
+export const clearUserScores = async () => {
+
+  const auth = getAuth();
+  const user = auth.currentUser;
+
+  const userId = await getUserDocumentId(user.uid);
+  const userDocRef = doc(db, "users", userId);
+  try {
+    await updateDoc(userDocRef, {
+      scores: [] // Set scores array to an empty array
+    });
+    console.log("Scores array cleared for user:", userId);
+  } catch (error) {
+    console.error("Error clearing scores array:", error);
   }
 };
