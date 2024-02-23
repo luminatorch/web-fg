@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Card, CardContent, Typography, Grid, IconButton, Menu, MenuItem } from '@mui/material';
+import { Card, CardContent, Typography, IconButton, Menu, MenuItem } from '@mui/material';
 import MoreVertIcon from '@mui/material/Icon';
 
 const ScoreCard = ({ score, onViewOptions, onUpdateScore, onDeleteScore }) => {
@@ -16,6 +16,8 @@ const ScoreCard = ({ score, onViewOptions, onUpdateScore, onDeleteScore }) => {
     return (
       <Card>
         <CardContent>
+          {score && (
+            <div>
           <Typography variant="h5">Paciente: {score.patientName}</Typography>
           <Typography variant="body1">Score total: {score.totalScore}</Typography>
           <IconButton
@@ -32,6 +34,8 @@ const ScoreCard = ({ score, onViewOptions, onUpdateScore, onDeleteScore }) => {
           <MenuItem onClick={() => { onUpdateScore(score); handleClose(); }}>Atualizar Score</MenuItem>
           <MenuItem onClick={() => { onDeleteScore(score); handleClose(); }}>Deletar Score</MenuItem>
         </Menu>
+        </div>
+        )}
         </CardContent>
       </Card>
     );

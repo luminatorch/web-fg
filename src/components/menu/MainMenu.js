@@ -67,10 +67,10 @@ function MainMenu() {
         <Button variant="contained" color="primary" onClick={handleSignOut}>
           Sign out
         </Button>
-        <Button variant="contained" color="primary" onClick={handleDelete}>
+        <Button disabled variant="contained" color="primary" onClick={handleDelete}>
           DELETE DOCUMENTS FROM SCORES COLLECTION
         </Button>
-        <Button variant="contained" color="primary" onClick={handleUserDelete}>
+        <Button disabled variant="contained" color="primary" onClick={handleUserDelete}>
           DELETE THE USERS SCORES
         </Button>
       </Box>

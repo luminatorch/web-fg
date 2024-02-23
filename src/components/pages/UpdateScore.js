@@ -1,25 +1,29 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Button, TextField, FormControlLabel, Checkbox, Radio, RadioGroup, FormLabel, Box } from '@mui/material';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { Button, FormControlLabel, Checkbox, Radio, RadioGroup, FormLabel, Box } from '@mui/material';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { newScore } from '../operations/firebaseOperations';
+import { updateScore } from '../operations/firebaseOperations';
 import { Score } from '../models/models';
 
 
-function DisplayOptions() {
-    const [score, setScore] = useState(new Score(undefined, undefined,
-            {   fibrillation: false, 
-                age: false, 
-                strokeScale: false, 
-                tHemorrhage: 'none', 
-                glucose: false, 
-                aspects: false, 
-                injury: false, 
-                nasoenteral: false  }, undefined, undefined));
+function UpdateScore() {
+
+    const location = useLocation();
+    const { receivedScore } = location.state || {};
+
+    const [score, setScore] = useState(new Score(receivedScore.id, receivedScore.patientName,
+            {   fibrillation: receivedScore.score.fibrillation, 
+                age: receivedScore.score.age, 
+                strokeScale: receivedScore.score.strokeScale, 
+                tHemorrhage: receivedScore.score.tHemorrhage, 
+                glucose: receivedScore.score.glucose, 
+                aspects: receivedScore.score.aspects, 
+                injury: receivedScore.score.injury, 
+                nasoenteral: receivedScore.score.nasoenteral  }, receivedScore.createdAt, receivedScore.totalScore));
     const [openDialog, setOpenDialog] = useState(false);
 
   
@@ -74,7 +78,11 @@ function DisplayOptions() {
     
         try {
 
-            await newScore(score, calculatedTotalScore);
+            await updateScore(score.documentId, {
+                score: score.score,
+                updatedAt: new Date(),
+                totalScore: calculatedTotalScore
+            });
         
             navigate('/success', { state: { patientName: score.patientName , totalScore: calculatedTotalScore } });
         } catch (error) {
@@ -86,6 +94,10 @@ function DisplayOptions() {
 
     return (
         <Box sx={{ padding: 3, maxWidth: 600, margin: 'auto' }}>
+
+            <div>
+                <p>Paciente: {score.patientName}</p>
+            </div>
             <form onSubmit={handleSubmit} sx={{
                     display: 'flex',
                     flexDirection: 'column',
@@ -93,14 +105,6 @@ function DisplayOptions() {
                     '& .MuiTextField-root': { m: 1, width: '25ch' }, // Adjust field sizes
                     '& .MuiButton-root': { m: 1, width: '25ch' }, // Adjust button sizes
       }} >
-            <TextField
-                label="Patient's Name"
-                value={score.patientName}
-                onChange={(e) => handleOptionChange('patientName',e.target.value)}
-                variant="outlined"
-                margin="normal"
-                fullWidth
-            />
 
             <div>
                 <FormControlLabel
@@ -234,4 +238,4 @@ function DisplayOptions() {
 
 }
 
-export default DisplayOptions;
+export default UpdateScore;

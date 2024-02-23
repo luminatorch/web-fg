@@ -1,12 +1,13 @@
-import { fetchScores } from '../operations/firebaseOperations';
+import { deleteScore, fetchScores } from '../operations/firebaseOperations';
 import React, { useEffect, useState } from 'react';
-import { Grid } from '@mui/material';
+import { Grid, Button } from '@mui/material';
 import ScoreCard from '../display/ScoreCard';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 
 const ListScores = () => {
   const [scores, setScores] = useState([]);
+  const [refresh, setRefresh] = useState(false);
   const location = useLocation();
   const { userId } = location.state || {};
   const navigate = useNavigate();
@@ -14,10 +15,11 @@ const ListScores = () => {
   useEffect(() => {
     const loadScores = async () => {
       const fetchedScores = await fetchScores(userId);
-      setScores(fetchedScores);
+      const validScores = fetchedScores.filter(score => score != null);
+      setScores(validScores);
     };
     loadScores();
-  }, []);
+  }, [refresh]);
 
   const handleViewOptions = (scores) => {
     // Logic to view options
@@ -26,10 +28,13 @@ const ListScores = () => {
 
   const handleUpdateScore = (scores) => {
     // Logic to update score, potentially navigate to DisplayOptions with score data
+    navigate('/update-score', {state: {receivedScore: scores}});
   };
 
-  const handleDeleteScore = (scores) => {
+  const handleDeleteScore = async (scores) => {
     // Logic to delete score
+    await deleteScore(scores.id);
+    setRefresh(prev => !prev);
   };
 
   return (
@@ -44,6 +49,7 @@ const ListScores = () => {
           />
         </Grid>
       ))}
+      <Button variant="contained" onClick={() => navigate(-1)}>Voltar</Button>
     </Grid>
   );
 };

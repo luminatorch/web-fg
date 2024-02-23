@@ -1,6 +1,6 @@
 // firebaseOperations.js
 import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
-import { doc, setDoc, addDoc, collection, deleteDoc, updateDoc, arrayUnion, query, where, getDocs, getDoc } from 'firebase/firestore';
+import { doc, setDoc, addDoc, collection, deleteDoc, updateDoc, arrayUnion, query, where, getDocs, getDoc, arrayRemove } from 'firebase/firestore';
 import db from '../../firebase-config';
 
 // Function to create a new user
@@ -60,26 +60,6 @@ export const newScore = async (score, total_score) => {
           userId: user.uid
       });
 
-
-
-      // const scoreRef = await addDoc(collection(db, 'scores'), {
-      //     patientName: score.patientName,
-      //     totalScore: total_score,
-      //     score: {
-      //       fibrillation: score.fibrillation,
-      //       age: score.age,
-      //       strokeScale: score.strokeScale,
-      //       tHemorrhage: score.tHemorrhage,
-      //       glucose: score.glucose,
-      //       aspects: score.aspects,
-      //       injury: score.injury,
-      //       nasoenteral: score.nasoenteral
-      //     },
-      //     createdAt: new Date(),
-      //     userId: user.uid
-      // });
-
-
       const userDocRef = doc(db, 'users', userDocID);
 
       await updateDoc(userDocRef, {
@@ -111,27 +91,7 @@ export const getUserDocumentId = async (uid) => {
     }
 };
 
-
-// Fetch scores from user
-// export const fetchScores = async (uid) => {
-
-//   const userId = await getUserDocumentId(uid);
-//   const userDocRef = doc(db, 'users', userId);
-//   const userDocSnap = await getDoc(userDocRef);
-
-//   if (userDocSnap.exists()) {
-//     const userScoresIds = userDocSnap.data().scores; // The array of scores document IDs
-//     const scoresPromises = userScoresIds.map(scoreId => getDoc(doc(db, 'scores', scoreId)));
-//     const scoresDocs = await Promise.all(scoresPromises);
-
-//     const scores = scoresDocs.map(doc => ({ id: doc.id, patientName: doc.data().patientName, totalScore: doc.data().totalScore }));
-//     return scores; // Array of score objects
-//   } else {
-//     console.log("No such user document!");
-//     return [];
-//   }
-// };
-
+// Fetch all scores
 export const fetchScores = async (uid) => {
   const userId = await getUserDocumentId(uid);
   const userDocRef = doc(db, 'users', userId);
@@ -149,6 +109,54 @@ export const fetchScores = async (uid) => {
     return [];
   }
 };
+
+
+// Update a score
+export const updateScore = async (scoreId, updatedFields) => {
+
+    const auth = getAuth();
+    const user = auth.currentUser;
+    if (!user) {
+        console.error("No authenticated user found. ");
+        return { success: false, error: "No authenticated user. "};
+    }
+
+    const scoreRef = doc(db, 'scores', scoreId);
+
+    try {
+      await updateDoc(scoreRef, updatedFields);
+    } catch (error) {
+      console.error("Error updating score: ", error);
+      
+    }
+    
+};
+
+// Delete a score
+export const deleteScore = async (scoreId) => {
+
+    const auth = getAuth();
+    const user = auth.currentUser;
+    if (!user) {
+        console.error("No authenticated user found. ");
+        return { success: false, error: "No authenticated user. "};
+    }
+
+    try {
+      // Delete from scores collection
+      await deleteDoc(doc(db, 'scores', scoreId));
+
+      // Now delete from the 'scores' array in the user document
+      const userId = await getUserDocumentId(user.uid);
+      const userDocRef = doc(db, 'users', userId);
+      await updateDoc(userDocRef, {
+        scores: arrayRemove(scoreId)
+      });
+    } catch (error) {
+      console.error("Error deleting score: ", error);
+    }
+};
+
 
 
 // FOR DEVELOPMENT ONLY

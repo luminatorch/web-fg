@@ -1,6 +1,6 @@
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Button, TextField, FormControlLabel, Checkbox, Radio, RadioGroup, FormLabel, Box } from '@mui/material';
+import { Button, FormControlLabel, Checkbox, FormLabel, Box } from '@mui/material';
 
 
 function ViewScore() {
@@ -9,7 +9,7 @@ function ViewScore() {
     const { score } = location.state || {};
 
     const handleBackButton = () => {
-        navigate('/list-scores');
+        navigate(-1);
     }
 
     return (

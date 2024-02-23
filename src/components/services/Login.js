@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import { TextField, Button, Box } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { createNewUser } from '../operations/firebaseOperations';
 
 function Login() {
   const [email, setEmail] = useState('');

@@ -6,7 +6,8 @@ import MainMenu from './components/menu/MainMenu';
 import Login from './components/services/Login';
 import NewUser from './components/services/NewUser';
 import ListScores from './components/pages/ListScores';
-import ViewScore from './components/pages/ViewScore'
+import ViewScore from './components/pages/ViewScore';
+import UpdateScore from './components/pages/UpdateScore';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route path="/new-user" element={<NewUser />} />
         <Route path="/list-scores" element={<ListScores/>}> </Route>
         <Route path="/score-details" element={<ViewScore/>}></Route>
+        <Route path="/update-score" element={<UpdateScore/>}></Route>
       </Routes>
     </Router>
   );
