@@ -233,6 +233,7 @@ function UpdateScore() {
                     </DialogActions>
                 </Dialog>
             </form>
+            <Button sx={{ margin: 0}} variant="contained" onClick={() => navigate(-1)}>Voltar</Button>
         </Box>
       );
 

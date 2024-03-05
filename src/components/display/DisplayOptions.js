@@ -94,7 +94,7 @@ function DisplayOptions() {
                     '& .MuiButton-root': { m: 1, width: '25ch' }, // Adjust button sizes
       }} >
             <TextField
-                label="Patient's Name"
+                label="Nome do Paciente"
                 value={score.patientName}
                 onChange={(e) => handleOptionChange('patientName',e.target.value)}
                 variant="outlined"
@@ -229,6 +229,7 @@ function DisplayOptions() {
                     </DialogActions>
                 </Dialog>
             </form>
+            <Button sx={{ margin: 0}} variant="contained" onClick={() => navigate(-1)}>Voltar</Button>
         </Box>
       );
 

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import { TextField, Button, Box } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import logo from '../../assets/fastgain_logo_F.jpeg';
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -27,45 +28,50 @@ function Login() {
   };
 
   return (
-    <Box component="form" 
-      onSubmit={handleLogin} 
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        '& .MuiTextField-root': { m: 1, width: '25ch' }, // Adjust field sizes
-        '& .MuiButton-root': { m: 1, width: '25ch' }, // Adjust button sizes
-      }}
-    >
-      <TextField
-        label="Email"
-        variant="outlined"
-        type="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        required
-      />
-      <TextField
-        label="Password"
-        variant="outlined"
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        required
-      />
-      {error && <p>{error}</p>}
-      <Button type="submit" variant="contained">Login</Button>
 
-      <Button
-        onClick={() => navigate('/new-user')} // Navigate to NewUser component for sign-up
-        fullWidth
-        variant="outlined"
-        sx={{ mt: 1, mb: 2 }}
-      >
-        Sign Up
-      </Button>
-    
-    </Box>
+      <div className="logo-container">
+        <img src={logo} alt="Logo"/>
+
+        <Box component="form" 
+          onSubmit={handleLogin} 
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            '& .MuiTextField-root': { m: 1, width: '25ch' }, // Adjust field sizes
+            '& .MuiButton-root': { m: 1, width: '25ch' }, // Adjust button sizes
+          }}
+        >
+          <TextField
+            label="Email"
+            variant="outlined"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <TextField
+            label="Password"
+            variant="outlined"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          {error && <p>{error}</p>}
+          <Button type="submit" variant="contained">Login</Button>
+
+          <Button
+            onClick={() => navigate('/new-user')} // Navigate to NewUser component for sign-up
+            fullWidth
+            variant="outlined"
+            sx={{ mt: 1, mb: 2 }}
+          >
+            Sign Up
+          </Button>
+        
+        </Box>
+    </div>
   );
 }
 
