@@ -1,0 +1,14 @@
+{
+  "files": {
+    "main.js": "/web-fg/static/js/main.9d216522.chunk.js",
+    "main.js.map": "/web-fg/static/js/main.9d216522.chunk.js.map",
+    "runtime~main.js": "/web-fg/static/js/runtime~main.0f70cc33.js",
+    "runtime~main.js.map": "/web-fg/static/js/runtime~main.0f70cc33.js.map",
+    "static/js/2.6785b6e2.chunk.js": "/web-fg/static/js/2.6785b6e2.chunk.js",
+    "static/js/2.6785b6e2.chunk.js.map": "/web-fg/static/js/2.6785b6e2.chunk.js.map",
+    "index.html": "/web-fg/index.html",
+    "precache-manifest.1af839a26010b1c1d7ea039adde10838.js": "/web-fg/precache-manifest.1af839a26010b1c1d7ea039adde10838.js",
+    "service-worker.js": "/web-fg/service-worker.js",
+    "static/media/fastgain_logo_F.jpeg": "/web-fg/static/media/fastgain_logo_F.be41137c.jpeg"
+  }
+}
