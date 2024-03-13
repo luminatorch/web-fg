@@ -208,7 +208,7 @@ function UpdateScore() {
             />
             </div>
     
-            <Button variant="outlined" onClick={handleClickOpen}>
+            <Button sx={{ marginTop: '10px', width: '100%'}}  variant="contained" onClick={handleClickOpen}>
                 Submit
             </Button>
                 <Dialog
@@ -233,7 +233,7 @@ function UpdateScore() {
                     </DialogActions>
                 </Dialog>
             </form>
-            <Button sx={{ margin: 0}} variant="contained" onClick={() => navigate(-1)}>Voltar</Button>
+            <Button sx={{ marginTop: '10px', width: '100%'}} variant="outlined" onClick={() => navigate(-1)}>Voltar</Button>
         </Box>
       );
 

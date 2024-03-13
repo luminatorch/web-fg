@@ -32,7 +32,7 @@ const ScoreCard = ({ score, onViewOptions, onUpdateScore, onDeleteScore }) => {
           <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
           <MenuItem onClick={() => { onViewOptions(score); handleClose(); }}>Detalhes</MenuItem>
           <MenuItem onClick={() => { onUpdateScore(score); handleClose(); }}>Atualizar Score</MenuItem>
-          <MenuItem onClick={() => { onDeleteScore(score); handleClose(); }}>Deletar Score</MenuItem>
+          <MenuItem onClick={() => { onDeleteScore(score); handleClose(); }}>Excluir Score</MenuItem>
         </Menu>
         </div>
         )}

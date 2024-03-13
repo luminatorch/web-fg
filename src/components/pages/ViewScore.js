@@ -59,15 +59,6 @@ function ViewScore() {
             </div>
 
             <FormLabel disabled component="legend">Transformation Hemorrhage:</FormLabel>
-            {/* <RadioGroup
-                name="tHemorrhage"
-                value={score.score.tHemorrhage}
-                disabled
-            >
-                <FormControlLabel value="none" control={<Radio />} label="None" disabled />
-                <FormControlLabel value="petequial" control={<Radio />} label="Petequial" disabled />
-                <FormControlLabel value="hematoma" control={<Radio />} label="Hematoma" disabled />
-            </RadioGroup> */}
             {score.score.tHemorrhage === 'none' && (
                 <FormControlLabel
                 control={
@@ -157,7 +148,7 @@ function ViewScore() {
             />
             </div>
     
-            <Button variant="outlined" onClick={handleBackButton}>
+            <Button sx={{marginTop: '15px', width: '100%'}} variant="contained" onClick={handleBackButton}>
                 Voltar
             </Button>
         </Box>

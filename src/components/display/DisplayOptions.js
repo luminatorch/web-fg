@@ -90,8 +90,8 @@ function DisplayOptions() {
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
-                    '& .MuiTextField-root': { m: 1, width: '25ch' }, // Adjust field sizes
-                    '& .MuiButton-root': { m: 1, width: '25ch' }, // Adjust button sizes
+                    //'& .MuiTextField-root': { m: 1, width: '25ch' }, // Adjust field sizes
+                    //'& .MuiButton-root': { m: 1, width: '50ch' }, // Adjust button sizes
       }} >
             <TextField
                 label="Nome do Paciente"
@@ -204,7 +204,7 @@ function DisplayOptions() {
             />
             </div>
     
-            <Button variant="outlined" onClick={handleClickOpen}>
+            <Button sx={{ marginTop: '20px', width: '100%'}} variant="contained" onClick={handleClickOpen}>
                 Submit
             </Button>
                 <Dialog
@@ -229,7 +229,7 @@ function DisplayOptions() {
                     </DialogActions>
                 </Dialog>
             </form>
-            <Button sx={{ margin: 0}} variant="contained" onClick={() => navigate(-1)}>Voltar</Button>
+            <Button sx={{ marginTop: '10px', width: '100%'}} variant="outlined" onClick={() => navigate(-1)}>Voltar</Button>
         </Box>
       );
 

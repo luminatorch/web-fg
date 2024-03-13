@@ -38,7 +38,7 @@ const ListScores = () => {
   };
 
   return (
-    <Grid container spacing={2}>
+    <Grid container spacing={2} direction={'column'} alignContent={'center'}>
       {scores.map(scores => (
         <Grid item key={scores.id} xs={12}>
           <ScoreCard
@@ -49,7 +49,7 @@ const ListScores = () => {
           />
         </Grid>
       ))}
-      <Button variant="contained" onClick={() => navigate(-1)}>Voltar</Button>
+      <Button sx={{margin: '20px', width: '28%', display: 'flex', flexDirection: 'center'}} variant="contained" onClick={() => navigate(-1)}>Voltar</Button>
     </Grid>
   );
 };

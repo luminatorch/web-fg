@@ -19,7 +19,7 @@ const theme = createTheme({
       secondary: '#28a745', // Green text for secondary information or accents
     },
   },
-  // Add any additional customization here
+  
 });
 
 function ThemedApp() {
