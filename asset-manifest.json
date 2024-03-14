@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.js": "/web-fg/static/js/main.9d216522.chunk.js",
-    "main.js.map": "/web-fg/static/js/main.9d216522.chunk.js.map",
+    "main.js": "/web-fg/static/js/main.a3a5276a.chunk.js",
+    "main.js.map": "/web-fg/static/js/main.a3a5276a.chunk.js.map",
     "runtime~main.js": "/web-fg/static/js/runtime~main.0f70cc33.js",
     "runtime~main.js.map": "/web-fg/static/js/runtime~main.0f70cc33.js.map",
-    "static/js/2.6785b6e2.chunk.js": "/web-fg/static/js/2.6785b6e2.chunk.js",
-    "static/js/2.6785b6e2.chunk.js.map": "/web-fg/static/js/2.6785b6e2.chunk.js.map",
+    "static/js/2.926142c2.chunk.js": "/web-fg/static/js/2.926142c2.chunk.js",
+    "static/js/2.926142c2.chunk.js.map": "/web-fg/static/js/2.926142c2.chunk.js.map",
     "index.html": "/web-fg/index.html",
-    "precache-manifest.0b23df6499484aee21ae71fb30d50902.js": "/web-fg/precache-manifest.0b23df6499484aee21ae71fb30d50902.js",
+    "precache-manifest.1a354630cf43c474b1c9b0c096ac2555.js": "/web-fg/precache-manifest.1a354630cf43c474b1c9b0c096ac2555.js",
     "service-worker.js": "/web-fg/service-worker.js",
     "static/media/fastgain_logo_F.jpeg": "/web-fg/static/media/fastgain_logo_F.be41137c.jpeg"
   }
