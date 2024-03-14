@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { HashRouter as Router, Route, Routes } from 'react-router-dom';
 import DisplayOptions from './components/display/DisplayOptions';
 import SuccessPage from './components/pages/SuccessPage';
 import MainMenu from './components/menu/MainMenu';

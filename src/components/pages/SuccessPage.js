@@ -12,13 +12,13 @@ function SuccessPage() {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        '& .MuiTextField-root': { m: 1, width: '25ch' }, // Adjust field sizes
-        '& .MuiButton-root': { m: 1, width: '25ch' }, // Adjust button sizes
+        //'& .MuiTextField-root': { m: 1, width: '25ch' }, // Adjust field sizes
+        //'& .MuiButton-root': { m: 1, width: '25ch' }, // Adjust button sizes
       }}>
-        <h1>Score Added Successfully!</h1>
-        <p>Patient Name: {patientName}</p>
-        <p>Total Score: {totalScore}</p>
-        <Button variant="contained" onClick={() => navigate('/main-menu')}>Go Back to Main Menu</Button>
+        <h1>Score adicionado!</h1>
+        <p>Nome do paciente: {patientName}</p>
+        <p>Score total: {totalScore}</p>
+        <Button sx={{marginTop: '15px', width: '100%'}} variant="contained" onClick={() => navigate('/main-menu')}>Voltar para menu principal</Button>
       </Box> 
   );
 }
